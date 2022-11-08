@@ -1,0 +1,38 @@
+{% extends 'templatesdbms\dbmsbase.html' %}
+{% block title %}DBMS New App{% endblock title %}
+{% block body %}
+<div class="container ">
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <!--<th scope="col">S.N</th>-->
+                <th scope="col">Profile</th>
+                <th scope="col">Room name</th>
+                <th scope="col">Invigilators in room</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for ard in allroom_data %}
+            
+            <tr >
+                <!--<th scope="row" id="increasenewapptable"></th>-->
+                
+                <!--<td class="increasenewapptable" id="count"></td>-->
+
+                <td>{{ard.profile}}</td>
+                <td>{{ard.roomname}}</td>
+                <td>{{ard.invigilatorsinroom}}</td>
+                
+                
+            </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock body %}

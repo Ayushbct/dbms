@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Viewtable{% endblock title %}
+{% block viewtablecontent %}
+<h1>List of invigilator</h1>
+<!-- {% for n in newapp_data %}
+{{n.newappname}}<br>
+{{n.newappemail}}<br>
+{{n.newappphone}}<br>
+{{n.newappaddress}}<br>
+{{n.newappdepart}}<br>
+<p>"---------------------------------------"</p>
+
+{% endfor %} -->
+<div class="container">
+    <form method="get">
+        {{viewfilter.form}}
+        <button class="btn btn-primary mx-1 my-1" type="submit">Search</button>
+    </form>
+</div>
+
+
+<div class="container ">
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <!--<th scope="col">S.N</th>-->
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Address</th>
+                <th scope="col">Department</th>
+                <th scope="col">Add</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for n in newapp_data %}
+            {% if user == n.profile.user %}
+            <tr >
+                <!--<th scope="row" id="increasenewapptable"></th>-->
+                
+                <!--<td class="increasenewapptable" id="count"></td>-->
+
+                <td>{{n.newappname}}</td>
+                <td>{{n.newappemail}}</td>
+                <td>{{n.newappphone}}</td>
+                <td>{{n.newappaddress}}</td>
+                <td>{{n.newappdepart}}</td>
+                <td>
+                    {% comment %} <button class="btn btn-primary btn-sm" >Add me</button> {% endcomment %}
+                    <a href="{% url 'updatenewapp' n.id %}" ><button class="btn btn-info btn-sm">Update</button></a>
+                    <a href="{% url 'deletenewapp' n.id %}" ><button class="btn btn-danger btn-sm">Delete</button></a>
+                    
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<body>
+    <script>
+        // var length = document.getElementsByClassName("increasenewapptable").length
+        // document.getElementById("count").innerHTML = length;
+        
+    </script>
+</body>
+
+
+
+{% endblock viewtablecontent %}

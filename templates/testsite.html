@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Test site{% endblock title %}
+{% block testsitecontent %}
+
+
+<h1>Test site</h1>
+
+<h2>Test site form</h2>
+<div class="container">
+    <form method="post" action="/testing">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input required type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Bus" id="flexCheckDefault" name="Bus">
+            <label class="form-check-label" for="Bus">
+              Bus
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Bike" id="flexCheckChecked" name='Bike'>
+            <label class="form-check-label" for="Bike">
+              Bike
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Car" id="flexCheckChecked" name="Car">
+            <label class="form-check-label" for="Car">
+              Car
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+
+
+<hr>
+<h1>List of all test data</h1>
+<div class="container">
+
+    {% for atd in alltest_data %}
+    <p>Name= {{atd.name}}
+  
+    </p>
+    {% endfor %}
+</div>
+
+{% comment %} <div class="container ">
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <!--<th scope="col">S.N</th>-->
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Address</th>
+                <th scope="col">Department</th>
+                <th scope="col">Add</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for n in allnewapp_data %}
+            <tr >
+                <!--<th scope="row" id="increasenewapptable"></th>-->
+                
+                <!--<td class="increasenewapptable" id="count"></td>-->
+
+                <td>{{n.newappname}}</td>
+                <td>{{n.newappemail}}</td>
+                <td>{{n.newappphone}}</td>
+                <td>{{n.newappaddress}}</td>
+                <td>{{n.newappdepart}}</td>
+                <td>
+                    
+                    <button class="btn btn-primary btn-sm" >Add me</button>
+                    <a href="{% url 'updatenewapp' n.id %}" ><button class="btn btn-info btn-sm">Update</button></a>
+                    <a href="{% url 'deletenewapp' n.id %}" ><button class="btn btn-danger btn-sm">Delete</button></a>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> {% endcomment %}
+
+<script>
+    
+
+</script>
+
+{% endblock testsitecontent %}

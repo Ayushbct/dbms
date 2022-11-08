@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Add room{% endblock title %}
+{% block addroomcontent %}
+
+
+{% if addroom_data %}
+<h1>Update room</h1>
+<div class="container">
+  <form method="post" action="{% url 'updateroomfunc' addroom_data.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="roomname" class="form-label">Room Name</label>
+      <input value="{{addroom_data.roomname}}" type="text" required class="form-control" id="roomname" name="roomname" placeholder="Enter room name">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+</div>
+
+<div class="container">
+    <h3>Selected invigilator</h3>
+    <div>
+      {% for t in teachers %}
+      <p>
+ 
+        {{t.newappname}}, {{t.newappemail}}, {{t.newappdepart}},{{t.newappphone}}
+        <a href="{% url 'deleteinvigilatorfromroom' t.id addroom_data.id%}"><button
+            class="btn btn-danger btn-sm">Delete</button></a>
+             
+      </p>
+      {% endfor %}
+    </div>
+    <hr>
+  
+    <h3>Remaining invigilator</h3>
+    <div>
+      <form method="get">
+        {{viewfilter.form}}
+        <button class="btn btn-primary mx-1 my-1" type="submit">Search</button>
+      </form>
+      {% for r in removednewapp_data %}
+      {% if user == r.profile.user %}
+      <p>{{r.newappname}}, {{r.newappemail}}, {{r.newappdepart}},{{r.newappphone}}
+      
+      <a href="{% url 'addinvigilatorinroom' r.id addroom_data.id%}"><button class="btn btn-info btn-sm">Add</button></a>
+   
+      </p>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <hr>
+  
+    <h3>All invigilator</h3>
+    <div>
+      {% for a in allnewapp_data %}
+      {% if user == a.profile.user %}
+      <p>{{a.newappname}}, {{a.newappemail}}, {{a.newappdepart}},{{a.newappphone}}</p>
+      {% endif %}
+      {% endfor %}
+    </div>
+  
+    <hr>
+</div>
+
+
+
+
+{% else %}
+
+<h1>Add room</h1>
+<div class="container">
+  <form method="post" action="/addroom">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="roomname" class="form-label">Room Name</label>
+      <input type="text" required class="form-control" id="roomname" name="roomname" placeholder="Enter room name">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endif %}
+
+
+
+
+
+
+
+<hr>
+<h1>List of all the rooms</h1>
+<div class="container">
+    {% for ard in allroom_data %}
+    
+    {% if user == ard.profile.user  %}
+    <p>{{ard.roomname}}  <a href="{% url 'updateroom' ard.id %}"><button class="btn btn-info btn-sm">Edit</button></a>
+        <a href="{% url 'deleteroom' ard.id %}"><button class="btn btn-danger btn-sm">Delete</button></a>
+  
+    </p>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock addroomcontent %}

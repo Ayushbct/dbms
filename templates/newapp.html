@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Add invigilator{% endblock title %}
+{% block newappcontent %}
+
+
+{% if newapp_data %}
+<h1>Update invigilator</h1>
+<div class="container">
+  <form method="post" action="{% url 'updatenewappfunc' newapp_data.id %}" >
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="newappname" class="form-label">Name</label>
+      <input value='{{newapp_data.newappname}}' type="text"required class="form-control" id="newappname" name="newappname" placeholder="Enter name">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappemail" class="form-label">Email address</label>
+      <input value='{{newapp_data.newappemail}}' type="email"required class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappphone"required class="form-label">Phone Number</label>
+      <input value='{{newapp_data.newappphone}}' type="tel"required class="form-control" id="newappphone" name="newappphone" placeholder="Enter contact number">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappposition" class="form-label">Position</label>
+      <input value='{{newapp_data.newappposition}}' type="text"required class="form-control" id="newappposition" name="newappposition" placeholder="Enter position">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappaddress" class="form-label">Address</label>
+      <input value='{{newapp_data.newappaddress}}' type="text"required class="form-control" id="newappaddress" name="newappaddress" placeholder="Enter address">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappdepart" class="form-label">Department</label>
+      <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
+      
+      <option value="">Select your department</option>
+      <option value="Department of Computer and Electronics Engineering">Department of Computer and Electronics Engineering</option>
+      <option value="Department of Electrical Engineering">Department of Electrical Engineering</option>
+      <option value="Department of Civil Engineering">Department of Civil Engineering</option>
+    </select>
+    </div>
+
+    
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+</div>
+{% else %}
+<h1>Add invigilator</h1>
+<div class="container">
+  <form method="post" action="/newapp" >
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="newappname" class="form-label">Name</label>
+      <input type="text"required class="form-control" id="newappname" name="newappname" placeholder="Enter name">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappemail" class="form-label">Email address</label>
+      <input type="email"required class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappphone"required class="form-label">Phone Number</label>
+      <input type="tel"required class="form-control" id="newappphone" name="newappphone" placeholder="Enter contact number">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappposition" class="form-label">Position</label>
+      <input type="text"required class="form-control" id="newappposition" name="newappposition" placeholder="Enter position">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappaddress" class="form-label">Address</label>
+      <input type="text"required class="form-control" id="newappaddress" name="newappaddress" placeholder="Enter address">
+
+    </div>
+    <div class="mb-3">
+      <label for="newappdepart" class="form-label">Department</label>
+      <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
+      
+      <option value="">Select your department</option>
+      <option value="Department of Computer and Electronics Engineering">Department of Computer and Electronics Engineering</option>
+      <option value="Department of Electrical Engineering">Department of Electrical Engineering</option>
+      <option value="Department of Civil Engineering">Department of Civil Engineering</option>
+    </select>
+    </div>
+
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endif %}
+
+
+<script>
+  {% if newapp_data %}
+    document.getElementById('newappdepart').value = "{{newapp_data.newappdepart}}"
+  {% endif %}
+</script>
+
+
+{% endblock newappcontent %}
