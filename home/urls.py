@@ -58,5 +58,8 @@ urlpatterns = [
     path('logout',views.handleLogout,name='handleLogout'),
 
     path("randominvfunc/<addexam_id>",views.randominvfunc,name='randominvfunc'),
+    
+    
+    path('deletealldata',views.deleteAll,name='deleteAll'),
 
 ]

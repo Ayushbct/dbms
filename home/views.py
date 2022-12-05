@@ -488,40 +488,67 @@ def randominvfunc(request,addexam_id):
         allbuilding_data=aed.examaddbuilding.all()
         for abd in allbuilding_data:
             allroom_data = abd.rooms.all()
-            listofroom=list(allroom_data)
+            # listofroom=list(allroom_data)
+            if len(allroom_data)==0:
+                continue
+            else:
+                listofroom.append(list(allroom_data))
             for ard in allroom_data:
                 allnewaapproom=ard.invigilatorsinroom.all()
                 for anar in allnewaapproom:
                     ard.invigilatorsinroom.remove(anar)
                   
     
-                    
+    print (len(listofroom))
+    print(listofroom)
+    if len(listofroom)==0:
+        messages.info(request, "No rooms present")
+        return redirect('updateexam',addexam_id)
     
-    
-    
-    
-    for aed in allexam_data:
-        allbuilding_data=aed.examaddbuilding.all()
-        for abd in allbuilding_data:
-            allroom_data = abd.rooms.all().order_by('?')
-            numberofroom=len(list(allroom_data))
-            if numberofroom*numberofinvineachroom<= len(allnewapp_data):
+    if len(listofroom)*numberofinvineachroom<= len(allnewapp_data):
+        for aed in allexam_data:
+            allbuilding_data=aed.examaddbuilding.all()
+            for abd in allbuilding_data:
+                allroom_data = abd.rooms.all().order_by('?')
+                # if len(allroom_data)==0 and len(allbuilding_data)==1:
+                #     messages.info(request, "No rooms in the only building")
+                #     return redirect('updateexam',addexam_id)
                 for ard in allroom_data:
-                    if len(ard.invigilatorsinroom.all())<numberofinvineachroom:                        
-                        for alnewda in allnewapp_data: 
-                            if alnewda not in listofinvallroom and len(ard.invigilatorsinroom.all())<numberofinvineachroom:
-                                listofinvallroom.append(alnewda)
-                                ard.invigilatorsinroom.add(alnewda)
-                messages.success(request, "Invigilators randomized to the rooms in "+ abd.buildingname)
-            else:
-                messages.error(request, "Not enough invigilator for all rooms")
+                    # if len(ard.invigilatorsinroom.all())<numberofinvineachroom:
+                    for alnewda in allnewapp_data: 
+                        if alnewda not in listofinvallroom and len(ard.invigilatorsinroom.all())<numberofinvineachroom:
+                            listofinvallroom.append(alnewda)
+                            ard.invigilatorsinroom.add(alnewda)
+                # messages.success(request, "Invigilators randomized to the rooms in "+ abd.buildingname)
+        messages.success(request, "Invigilators randomized to the rooms")
+    else:
+        messages.error(request, "Not enough invigilator for all rooms")
+    
+    
+    
     data = {
-        
-      
-        
-        
-        
 
     }
 
     return redirect('updateexam',addexam_id)
+
+
+def deleteAll(request):
+    
+    allnewapp_data = Newapp.objects.all()
+    allnewapp_data.delete()
+
+    alladdroom_data = Addroom.objects.all()
+    alladdroom_data.delete()
+
+    allbuilding_data = Addbuilding.objects.all()
+    allbuilding_data.delete()
+
+    alladdexam_data = Addexam.objects.all()
+    alladdexam_data.delete()
+    
+    
+    messages.success(request, 'All Newapp, Exam, Building, Room deleted')
+    return redirect('viewexam')
+
+

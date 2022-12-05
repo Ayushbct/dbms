@@ -119,65 +119,32 @@ def dbmsfileslist(request):
     return render(request, "templatesdbms\dbmsfileslist.html", context)
 
 def dbmsnewapp(request):
-
     profile=Profile.objects.get(user=request.user)
-    alltesting_data=Testing.objects.all()
-    allnewapp_data=Newapp.objects.filter(profile=profile)
-    numberofinvineachroom=2
+    newapp_data=Newapp.objects.filter(profile=profile)
+    departments=[]
+    positions=[]
+    deparment_numbers=[]
+    position_numbers=[]
+    for nap in newapp_data:
+        departments.append(nap.newappdepart)
+        positions.append(nap.newappposition)
+    department_removing_dup=[*set(departments)]
+    position_removing_dup=[*set(positions)]
+    for drd in department_removing_dup:
+        deparment_numbers.append(departments.count(drd))
+    for prd in position_removing_dup:
+        position_numbers.append(positions.count(prd))
 
-    # allexam_data=Addexam.objects.filter(profile=profile)
-    allexam_data=Addexam.objects.filter(examname="Bachelor 2079")
-    listofinvallroom=[]
-    listofroom=[]
-    listofnewapp=list(allnewapp_data)
-    for aed in allexam_data:
-        allbuilding_data=aed.examaddbuilding.all()
-        for abd in allbuilding_data:
-            allroom_data = abd.rooms.all()
-            listofroom=list(allroom_data)
-            for ard in allroom_data:
-                allnewaapproom=ard.invigilatorsinroom.all()
-                for anar in allnewaapproom:
-                    ard.invigilatorsinroom.remove(anar)
-                  
-    
-                    
+
     
     
-    
-    
-    for aed in allexam_data:
-        allbuilding_data=aed.examaddbuilding.all()
-        for abd in allbuilding_data:
-            print(abd.buildingname)
-            allroom_data = abd.rooms.all().order_by('?')
-            numberofroom=len(list(allroom_data))
-
-            if numberofroom*numberofinvineachroom<= len(allnewapp_data):
-                for ard in allroom_data:
-                    if len(ard.invigilatorsinroom.all())<numberofinvineachroom:                        
-                        for alnewda in allnewapp_data: 
-                            if alnewda not in listofinvallroom and len(ard.invigilatorsinroom.all())<numberofinvineachroom:
-                                listofinvallroom.append(alnewda)
-                                ard.invigilatorsinroom.add(alnewda)
-            else:
-                messages.error(request, "Not enough invigilator for all rooms")
-
-
-
-    # print(allexam_data)
-
-    # allroom_data = Addroom.objects.filter(profile=profile)
-    # allinvigilator_data = Newapp.objects.filter(profile=profile)
-    # for ard in allroom_data:
-        
-    #     print(ard.pk)
-    #     print(ard.roomname)
-    #     print (ard.invigilatorsinroom.all())
-    # print(allroom_data)
     context={
+        
+        "departments":department_removing_dup,
+        "deparment_numbers":deparment_numbers,
+        "positions":position_removing_dup,
+        "position_numbers":position_numbers,
     
-        # "allroom_data":allroom_data,
         
     }
     return render(request, "templatesdbms\dbmsnewapp.html", context)
