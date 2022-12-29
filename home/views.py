@@ -132,6 +132,9 @@ def addexam(request):
         newexamdate = request.POST.get('examdate')
         examtime = request.POST.get('examtime')
         newexamtime = request.POST.get('examtime')
+        examtime_end = request.POST.get('examtime_end')
+        newexamtime_end = request.POST.get('examtime_end')
+        examshift = request.POST.get('examshift')
         examdesc = request.POST.get('examdesc')
         
         # This is for dbms
@@ -140,13 +143,16 @@ def addexam(request):
 
         addexam = Addexam(examname=examname, examtype=examtype, examsemtype=examsemtype,
                           regularback=regularback, examcentre=examcentre, examdate=examdate,
-                          newexamdate=newexamdate,examtime=examtime,newexamtime=newexamtime ,examdesc=examdesc,
+                          newexamdate=newexamdate,examtime=examtime,newexamtime=newexamtime,
+                          examtime_end=examtime_end,newexamtime_end=newexamtime_end ,
+                          examshift=examshift,examdesc=examdesc,
                         #   This is for dbms
                           profile=profile,
                         #   Upto here
                           )
         addexam.save()
         messages.success(request, 'Exam added')
+        
     return render(request, "addexam.html")
 
 
@@ -200,6 +206,9 @@ def updatefunc(request, addexam_id):
     addexam_data.newexamdate = request.POST.get('examdate')
     addexam_data.examtime = request.POST.get('examtime')
     addexam_data.newexamtime = request.POST.get('examtime')
+    addexam_data.examtime_end = request.POST.get('examtime_end')
+    addexam_data.newexamtime_end = request.POST.get('examtime_end')
+    addexam_data.examshift = request.POST.get('examshift')
     addexam_data.examdesc = request.POST.get('examdesc')
     addexam_data.save()
     messages.success(request, 'Exam updated')

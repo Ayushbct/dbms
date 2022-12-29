@@ -16,7 +16,9 @@
                 <th scope="col">Regular or back</th>
                 <th scope="col">Exam centre</th>
                 <th scope="col">Exam date</th>
-                <th scope="col">Exam time</th>
+                <th scope="col">Start time</th>
+                <th scope="col">End time</th>
+                <th scope="col">Exam shift</th>
                 {% comment %} This is for dbms {% endcomment %}
                 <th scope="col">Created by</th>
                 {% comment %} Upto here {% endcomment %}
@@ -43,6 +45,8 @@
                 {% comment %} <td>{{n.examdate}}</td> {% endcomment %}
                 <td>{{n.newexamdate}}</td>
                 <td>{{n.newexamtime}}</td>
+                <td>{{n.newexamtime_end}}</td>
+                <td>{{n.examshift}}</td>
                 {% comment %} This if for dbms {% endcomment %}
 
                 <td>{{n.profile}}</td>

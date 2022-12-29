@@ -10,11 +10,11 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     # path('',include('home.urls'))
     path('',dbmsviews.dbmshome,name='dbmshome'),
-    path("dbmsnewapp",dbmsviews.dbmsnewapp,name='dbmsnewapp'),
-    path("newapp",homeviews.newapp,name='newapp'),
+    # path("dbmsnewapp",dbmsviews.dbmsnewapp,name='dbmsnewapp'),
+    # path("newapp",homeviews.newapp,name='newapp'),
 
     path("dbmsfileslist",dbmsviews.dbmsfileslist,name='dbmsfileslist'),
-    path("dbmsfileslist/dbmsuploadfiles",dbmsviews.dbmsuploadfiles,name='dbmsuploadfiles'),
+    # path("dbmsfileslist/dbmsuploadfiles",dbmsviews.dbmsuploadfiles,name='dbmsuploadfiles'),
 
 
     path('signup',homeviews.handleSignup,name='handleSignup'),

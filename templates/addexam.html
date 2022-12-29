@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Add exam{% endblock title %}
 {% block addexamcontent %}
+{% comment %} <form>
+  <input type="time"onchange="functiontime(this);" required  class="form-control" id="testtime1" name="testtime1">
+  <input type="time" min='' required  class="form-control" id="testtime2" name="testtime2">
+  <button type="submit" id="submittime" class="btn btn-primary">Submit</button>
+</form> {% endcomment %}
 
 {% if addexam_data %}
 <h1>Update exam</h1>
 
-<!-- <h3 id="testing"></h3>
-<h3 id="testing1"></h3>
-<h3 id="testing2"></h3>
-<h3 id="testing3"></h3> -->
 
 <div class="container">
   <form method="post" action="{% url 'updatefunc' addexam_data.id %}">
@@ -64,9 +65,31 @@
       <input value="{{addexam_data.examdate}}" type="date" min="" required class="form-control" id="examdate"
         name="examdate">
     </div>
-    <div class="mb-3">
-      <label for="examtime" class="form-label">Exam Time</label>
+    {% comment %} <div class="mb-3">
+      <label for="examtime" class="form-label">Exam Time Start</label>
       <input value="{{addexam_data.examtime}}" type="time" required class="form-control" id="examtime" name="examtime">
+    </div> {% endcomment %}
+    <div class="mb-3">
+      <label for="examtime" class="form-label">Exam Time Start</label>
+      <input value="{{addexam_data.examtime}}" type="time" onchange="functiontime(this);"  required class="form-control" id="examtime" name="examtime">
+    </div>
+    {% comment %} <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input value="{{addexam_data.examtime_end}}" type="time" required class="form-control" id="examtime_end" name="examtime_end">
+    </div> {% endcomment %}
+    <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input value="{{addexam_data.examtime_end}}" type="time" min='' onchange="functiontime(this);" required class="form-control" id="examtime_end" name="examtime_end">
+    </div>
+    <div class="mb-3">
+      <label for="examshift" class="form-label">Select exam shift</label>
+      <select onchange="functiontime()" class="form-select" required id="examshift" name="examshift" >
+        
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <span class="help-block">You can only change this through exam start time.</span>
     </div>
     <div class="mb-3">
       <label for="examdesc" class="form-label">Exam description</label>
@@ -176,6 +199,7 @@
 {% else %}
 
 <h1>Add exam</h1>
+
 <div class="container">
   <form method="post" action="/addexam">
     {% csrf_token %}
@@ -228,9 +252,25 @@
       <input type="date" min="" required class="form-control" id="examdate" name="examdate">
     </div>
     <div class="mb-3">
-      <label for="examtime" class="form-label">Exam Time</label>
-      <input type="time" required class="form-control" id="examtime" name="examtime">
+      <label for="examtime" class="form-label">Exam Time Start</label>
+      <input type="time" onchange="functiontime(this);"   required class="form-control" id="examtime" name="examtime">
     </div>
+    <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input type="time" min='' onchange="functiontime(this);" required class="form-control" id="examtime_end" name="examtime_end">
+    </div>
+    <div class="mb-3">
+      <label for="examshift" class="form-label">Select exam shift</label>
+      <select onchange="functiontime()" class="form-select" required id="examshift" name="examshift">
+        
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <span class="help-block">You can only change this through exam start time.</span>
+    </div>
+    
+    
     <div class="mb-3">
       <label for="examdesc" class="form-label">Exam description</label>
       <textarea class="form-control" id="examdesc" required name="examdesc" rows="5"></textarea>
@@ -312,7 +352,27 @@
   }
   today = yyyy + '-' + mm + '-' + dd;
   document.getElementById("examdate").setAttribute("min", today);
-
+  
+  function functiontime(that){
+    starttime=document.getElementById("examtime").value
+    endtime=document.getElementById("examtime_end").value
+    document.getElementById("examtime_end").setAttribute("min", starttime);
+    hrs=starttime.split(':')
+    inthr=+hrs[0]
+    
+    if (inthr<12){
+      document.getElementById('examshift').selectedIndex=0;
+    }
+    else if(inthr>12 && inthr<16){
+      document.getElementById('examshift').selectedIndex=1;
+    }
+    else{
+      document.getElementById('examshift').selectedIndex=2;
+    }
+  }
+  
+  
+  
 
 </script>
 

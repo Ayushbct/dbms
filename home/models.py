@@ -79,6 +79,9 @@ class Addexam(models.Model):
     newexamdate=models.DateField(max_length=122,blank=True, null=True)
     examtime=models.CharField(max_length=122)
     newexamtime=models.TimeField(max_length=122,blank=True, null=True)
+    examtime_end=models.CharField(max_length=122,blank=True, null=True)
+    newexamtime_end=models.TimeField(max_length=122,blank=True, null=True)
+    examshift=models.CharField(max_length=122,blank=True, null=True)
     examdesc=models.TextField()
     #examnewapp=models.ForeignKey(Newapp,blank=True,null=True, on_delete=models.CASCADE)
     
