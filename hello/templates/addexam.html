@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% block title %}Add exam{% endblock title %}
+{% block addexamcontent %}
+{% comment %} <form>
+  <input type="time"onchange="functiontime(this);" required  class="form-control" id="testtime1" name="testtime1">
+  <input type="time" min='' required  class="form-control" id="testtime2" name="testtime2">
+  <button type="submit" id="submittime" class="btn btn-primary">Submit</button>
+</form> {% endcomment %}
+
+{% if addexam_data %}
+<h1>Update exam</h1>
+
+
+<div class="container">
+  <form method="post" action="{% url 'updatefunc' addexam_data.id %}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="examname" class="form-label">Exam Name</label>
+      <input type="text" value="{{addexam_data.examname}}" required class="form-control" id="examname" name="examname"
+        placeholder="Enter exam name">
+    </div>
+
+    <div class="mb-3">
+      <label for="examtype" class="form-label">Examination type</label>
+      <select onchange="entranceonot(this);" class="form-select" aria-label="Default select example" id="examtype"
+        name="examtype" required>
+
+        <option value="Exam Bachelor">Bachelor</option>
+        <option value="Exam Master">Master</option>
+        <option value="Exam Entrance">Entrance</option>
+      </select>
+    </div>
+
+    <div class="mb-3" id="oddevenselect">
+      <label for="examsemtype" class="form-label">Semester type</label>
+      <select class="form-select" required id="examsemtype" name="examsemtype">
+        <!--If you want to change value of these two change in javascript as well-->
+        <option value="">Select semester type</option>
+        <option value="Odd Semester">Odd Semester</option>
+        <option value="Even Semester">Even Semester</option>
+      </select>
+    </div>
+    <div class="mb-3" id="regularbackselect">
+      <div class="form-check form-check-inline">
+        <!--If you want to change value of this change in javascript as well-->
+        <input class="form-check-input" required type="radio" name="regularback" id="examregular" value="Regular exam">
+        <label class="form-check-label" for="examregular">Regular exam</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <!--If you want to change value of this change in javascript as well-->
+        <input class="form-check-input" type="radio" name="regularback" id="examback" value="Back exam">
+        <label class="form-check-label" for="examback">Back exam</label>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="examcentre" class="form-label">Exam Centre</label>
+      <input value="{{addexam_data.examcentre}}" type="text" required class="form-control" id="examcentre"
+        name="examcentre" placeholder="Enter exam centre">
+    </div>
+
+    <div class="mb-3">
+      <label for="examdate" class="form-label">Exam Date</label>
+      <input value="{{addexam_data.examdate}}" type="date" min="" required class="form-control" id="examdate"
+        name="examdate">
+    </div>
+    {% comment %} <div class="mb-3">
+      <label for="examtime" class="form-label">Exam Time Start</label>
+      <input value="{{addexam_data.examtime}}" type="time" required class="form-control" id="examtime" name="examtime">
+    </div> {% endcomment %}
+    <div class="mb-3">
+      <label for="examtime" class="form-label">Exam Time Start</label>
+      <input value="{{addexam_data.examtime}}" type="time" onchange="functiontime(this);"  required class="form-control" id="examtime" name="examtime">
+    </div>
+    {% comment %} <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input value="{{addexam_data.examtime_end}}" type="time" required class="form-control" id="examtime_end" name="examtime_end">
+    </div> {% endcomment %}
+    <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input value="{{addexam_data.examtime_end}}" type="time" min='' onchange="functiontime(this);" required class="form-control" id="examtime_end" name="examtime_end">
+    </div>
+    <div class="mb-3">
+      <label for="examshift" class="form-label">Select exam shift</label>
+      <select onchange="functiontime()" class="form-select" required id="examshift" name="examshift" >
+        
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <span class="help-block">You can only change this through exam start time.</span>
+    </div>
+    <div class="mb-3">
+      <label for="examdesc" class="form-label">Exam description</label>
+      <textarea class="form-control" id="examdesc" required name="examdesc"
+        rows="5">{{addexam_data.examdesc}}</textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+</div>
+{% comment %} For dbms {% endcomment %}
+<div class="container">
+  <form method="post" action="{% url 'randominvfunc' addexam_data.id %}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="numberofinv"required class="form-label">Enter number of invigilator in a room</label>
+      <input type="tel"required class="form-control" id="numberofinv" name="numberofinv" placeholder="Enter number of inv in room">
+    </div>
+    
+    <button type="submit" id="randomize" name="randomize" class="btn btn-primary">Randomize</button>
+  </form>
+</div>
+{% comment %} Upto here {% endcomment %}
+
+<div class="container">
+  <h3>Selected building</h3>
+  <div>
+    {% for bie in buildingsinexam %}
+    <p>
+      {{bie.buildingname}}
+      <a href="{% url 'deletebuildingfromexam' bie.id addexam_data.id%}"><button
+          class="btn btn-danger btn-sm">Delete</button></a>
+    </p>
+    {% endfor %}
+  </div>
+  <hr>
+
+  <h3>Remaining buildings</h3>
+  
+  <div>
+    {% for rbied in removedbuildingsinexam_data %}
+    {% if user == rbied.profile.user %}
+  
+    <p>{{rbied.buildingname}}
+      <a href="{% url 'addbuildinginexam' rbied.id addexam_data.id%}"><button class="btn btn-info btn-sm">Add</button></a>
+
+    </p>
+    {% endif %}
+    {% endfor %}
+  </div>
+  <hr>
+
+  <h3>All buildings</h3>
+  <div>
+    {% for aabd in alladdbuilding_data %}
+    {% if user == aabd.profile.user %}
+    <p>{{aabd.buildingname}}</p>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  <hr>
+</div>
+
+
+
+{% comment %} 
+<div class="container">
+  <h3>Selected invigilator</h3>
+  <div>
+    {% for t in teachers %}
+    <p>
+      {{t.newappname}}, {{t.newappemail}}, {{t.newappdepart}}
+      <a href="{% url 'deleteinvigilator' t.id addexam_data.id%}"><button
+          class="btn btn-danger btn-sm">Delete</button></a>
+    </p>
+    {% endfor %}
+  </div>
+  <hr>
+
+  <h3>Remaining invigilator</h3>
+  <div>
+    <form method="get">
+      {{viewfilter.form}}
+      <button class="btn btn-primary mx-1 my-1" type="submit">Search</button>
+    </form>
+    {% for r in removednewapp_data %}
+    <p>{{r.newappname}}, {{r.newappemail}}, {{r.newappdepart}}
+      <a href="{% url 'addinvigilator' r.id addexam_data.id%}"><button class="btn btn-info btn-sm">Add</button></a>
+
+    </p>
+    {% endfor %}
+  </div>
+  <hr>
+
+  <h3>All invigilator</h3>
+  <div>
+    {% for a in allnewapp_data %}
+    <p>{{a.newappname}}, {{a.newappemail}}, {{a.newappdepart}}</p>
+    {% endfor %}
+  </div>
+
+  <hr>
+</div> {% endcomment %}
+
+{% else %}
+
+<h1>Add exam</h1>
+
+<div class="container">
+  <form method="post" action="/addexam">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="examname" class="form-label">Exam Name</label>
+      <input type="text" required class="form-control" id="examname" name="examname" placeholder="Enter exam name">
+    </div>
+
+    <div class="mb-3">
+      <label for="examtype" class="form-label">Examination type</label>
+      <select onchange="entranceonot(this);" class="form-select" id="examtype" name="examtype" required>
+
+        <option value="Exam Bachelor">Bachelor</option>
+        <option value="Exam Master">Master</option>
+        <option value="Exam Entrance">Entrance</option>
+      </select>
+    </div>
+
+    <div class="mb-3" id="oddevenselect">
+      <label for="examsemtype" class="form-label">Semester type</label>
+      <select class="form-select" required id="examsemtype" name="examsemtype">
+        <!--If you want to change value of these two change in javascript as well-->
+        <option value="">Select semester type</option>
+        <option value="Odd Semester">Odd Semester</option>
+        <option value="Even Semester">Even Semester</option>
+      </select>
+    </div>
+
+    <div id="regularbackselect">
+      <div class="form-check form-check-inline">
+        <!--If you want to change value of this change in javascript as well-->
+        <input class="form-check-input" required type="radio" name="regularback" id="examregular" value="Regular exam">
+        <label class="form-check-label" for="examregular">Regular exam</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <!--If you want to change value of this change in javascript as well-->
+        <input class="form-check-input" type="radio" name="regularback" id="examback" value="Back exam">
+        <label class="form-check-label" for="examback">Back exam</label>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="examcentre" class="form-label">Exam Centre</label>
+      <input type="text" required class="form-control" id="examcentre" name="examcentre"
+        placeholder="Enter exam centre">
+    </div>
+
+    <div class="mb-3">
+      <label for="examdate" class="form-label">Exam Date</label>
+      <input type="date" min="" required class="form-control" id="examdate" name="examdate">
+    </div>
+    <div class="mb-3">
+      <label for="examtime" class="form-label">Exam Time Start</label>
+      <input type="time" onchange="functiontime(this);"   required class="form-control" id="examtime" name="examtime">
+    </div>
+    <div class="mb-3">
+      <label for="examtime_end" class="form-label">Exam Time End</label>
+      <input type="time" min='' onchange="functiontime(this);" required class="form-control" id="examtime_end" name="examtime_end">
+    </div>
+    <div class="mb-3">
+      <label for="examshift" class="form-label">Select exam shift</label>
+      <select onchange="functiontime()" class="form-select" required id="examshift" name="examshift">
+        
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <span class="help-block">You can only change this through exam start time.</span>
+    </div>
+    
+    
+    <div class="mb-3">
+      <label for="examdesc" class="form-label">Exam description</label>
+      <textarea class="form-control" id="examdesc" required name="examdesc" rows="5"></textarea>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endif %}
+
+
+<script>
+
+  {% if addexam_data %}
+  document.getElementById('examtype').value = "{{addexam_data.examtype}}"
+  document.getElementById('examsemtype').value = "{{addexam_data.examsemtype}}"
+
+  // document.getElementById('testing').innerHTML="{{addexam_data.examtime}}"  
+  // document.getElementById('testing1').innerHTML="{{addexam_data.examdate}}"  
+  // document.getElementById('testing2').innerHTML="{{addexam_data.newexamdate}}"  
+  // document.getElementById('testing3').innerHTML="{{addexam_data.newexamtime}}"  
+  entranceonot(document.getElementById('examtype'));
+
+  if (document.getElementById('examback').value == "{{addexam_data.regularback}}") {
+    document.getElementById('examback').checked = true;
+  }
+  if (document.getElementById('examregular').value == "{{addexam_data.regularback}}") {
+    document.getElementById('examregular').checked = true;
+  }
+  {% endif %}
+
+  function entranceonot(that) {
+
+    if (that.value == "Exam Entrance") {
+      {% if addexam_data %}
+      document.getElementById('examsemtype').selectedIndex = '0';
+      {% endif %}
+      document.getElementById("oddevenselect").style.display = "none";
+      document.getElementById("regularbackselect").style.display = "none";
+
+      document.getElementById("examsemtype").required = false;
+      document.getElementById('examsemtype').options[1].value = '';
+      document.getElementById('examsemtype').options[2].value = '';
+
+      document.getElementById("examregular").required = false;
+      document.getElementById("examregular").setAttribute("value", "");
+      document.getElementById("examregular").checked = true;
+      document.getElementById("examback").setAttribute("value", "");
+
+    } else {
+      document.getElementById("oddevenselect").style.display = "block";
+      document.getElementById("regularbackselect").style.display = "block";
+
+      document.getElementById("examsemtype").required = true;
+      document.getElementById('examsemtype').options[1].value = "Odd Semester";
+      document.getElementById('examsemtype').options[2].value = 'Even Semester';
+
+      document.getElementById("examregular").required = true;
+      document.getElementById("examregular").setAttribute("value", "Regular exam");
+      document.getElementById("examback").setAttribute("value", "Back exam");
+
+
+    }
+
+  }
+
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  today = yyyy + '-' + mm + '-' + dd;
+  document.getElementById("examdate").setAttribute("min", today);
+  
+  function functiontime(that){
+    starttime=document.getElementById("examtime").value
+    endtime=document.getElementById("examtime_end").value
+    document.getElementById("examtime_end").setAttribute("min", starttime);
+    hrs=starttime.split(':')
+    inthr=+hrs[0]
+    
+    if (inthr<12){
+      document.getElementById('examshift').selectedIndex=0;
+    }
+    else if(inthr>12 && inthr<16){
+      document.getElementById('examshift').selectedIndex=1;
+    }
+    else{
+      document.getElementById('examshift').selectedIndex=2;
+    }
+  }
+  
+  
+  
+
+</script>
+
+
+{% endblock addexamcontent %}

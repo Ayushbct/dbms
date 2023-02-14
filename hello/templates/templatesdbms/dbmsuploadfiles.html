@@ -1,0 +1,54 @@
+{% extends 'templatesdbms\dbmsbase.html' %}
+{% block title %}DBMS Upload Files{% endblock title %}
+{% block body %}
+<h2>Upload Files</h2>
+<div class="container my-3">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="fileInvigilator" class="form-label">Upload Only .xls or .xlsx file to the model</label>
+          <input class="form-control" type="file" required name="fileInvigilator" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          {% comment %} <input class="form-control" type="file" required name="fileInvigilator" > {% endcomment %}
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+<div class="container my-3">
+    <table class="table table-hover table-bordered ">
+      <thead>
+          <tr>
+              <th scope="col">Created By</th>
+              <th scope="col">File name</th>
+              <th scope="col">URL</th>                
+          </tr>
+      </thead>
+      <tbody>            
+          <tr >                
+              <td>{{profile.user.username}} (File uploaded by user)</td>
+              {% if profile.file_user %}
+              <td>{{file_user_basename}}</td>
+              <td><a href='{{profile.file_user.url}}' ><button  class="btn btn-primary">Download</button></a></td>
+              {% else %}
+              <td>No Files</td>
+              <td>No Files</td>
+              {% endif %}              
+          </tr>
+          <tr >                
+            <td>{{profile.user.username}} (File created by panda)</td>
+            {% if profile.file_generated %}
+            <td>{{file_generated_basename}}</td>
+            <td><a href='{{profile.file_generated.url}}' ><button  class="btn btn-primary">Download</button></a></td>
+            {% else %}
+            <td>No Files</td>
+            <td>No Files</td>
+            {% endif %}              
+        </tr>
+          
+      </tbody>
+    </table>
+</div>
+
+
+
+
+{% endblock body %}

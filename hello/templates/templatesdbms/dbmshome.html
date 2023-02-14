@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% comment %} {% extends 'templatesdbms\dbmsbase.html' %} {% endcomment %}
+{% block title %}DBMS Home{% endblock title %}
+{% block body %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+    integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+{% comment %} 
+<div class="container">
+    <div class="row row-cols-2">
+        <h4 class="col">Invigilators in departments</h4>
+    
+        <h4 class="col">Position of Invigilators</h4>
+        <div class="col">
+            <canvas id="myChart1" width="400" height="400"></canvas>
+        </div>    
+        <div class="col">
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+<div class="container my-3">
+  <h2>Upload Files</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="fileInvigilator" class="form-label">Upload Only .xls or .xlsx file to the model</label>
+          <input class="form-control" type="file" required name="fileInvigilator" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          {% comment %} <input class="form-control" type="file" required name="fileInvigilator" > {% endcomment %}
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+<div class="container my-3">
+    <table class="table table-hover table-bordered ">
+      <thead>
+          <tr>
+              <th scope="col">Created By</th>
+              <th scope="col">File name</th>
+              <th scope="col">URL</th>                
+          </tr>
+      </thead>
+      <tbody>            
+          <tr >                
+              <td>{{profile.user.username}} (File uploaded by user)</td>
+              {% if profile.file_user %}
+              <td>{{file_user_basename}}</td>
+              <td><a href='{{profile.file_user.url}}' ><button  class="btn btn-primary">Download</button></a></td>
+              {% else %}
+              <td>No Files</td>
+              <td>No Files</td>
+              {% endif %}              
+          </tr>
+          <tr >                
+            <td>{{profile.user.username}} (File created by panda)</td>
+            {% if profile.file_generated %}
+            <td>{{file_generated_basename}}</td>
+            <td><a href='{{profile.file_generated.url}}' ><button  class="btn btn-primary">Download</button></a></td>
+            {% else %}
+            <td>No Files</td>
+            <td>No Files</td>
+            {% endif %}              
+        </tr>
+          
+      </tbody>
+    </table>
+</div>
+
+
+{% comment %} <div class="container my-3">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="fileInvigilator" class="form-label">Upload any not to the model</label>
+      <input class="form-control" type="file" required name="fileInvigilator" >
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+  </form>
+  {% if uploaded_file_url %}
+  <p>File URL: <a href='{{uploaded_file_url}}' target="_blank">{{uploaded_file_url}}</a></p>
+  {% endif %}
+</div> {% endcomment %}
+
+
+<script>
+    
+  const color_palette1=["#FF6384","#36A2EB","#FFCD56","#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51","#f94144", "#f3722c", "#f8961e", "#f9844a","#f9c74f", "#90be6d", "#43aa8b", "#4d908e", "#577590", "#277da1"]
+  const color_palette2=['#90be6d', '#277da1','#f9c74f','#577590',  '#43aa8b' , '#f9844a', '#f8961e', '#f3722c', '#f94144', '#e76f51', '#4d908e','#f4a261', '#e9c46a', '#2a9d8f', '#264653', '#FFCD56', '#36A2EB', '#FF6384']
+  {% comment %} const ctx = document.getElementById('myChart'); {% endcomment %}
+  const myChart1 = new Chart(document.getElementById('myChart1'), {
+      type: 'doughnut',
+      data: {
+          {% comment %} labels: ['Red', 'Blue', 'Yellow',"tes","hajfhsk"],  {% endcomment %}
+          labels: [{% for d in departments %}"{{d|escapejs}}",{% endfor %}],
+          datasets: [{
+              {% comment %} label: 'Number of invigilator in departments', {% endcomment %}
+              data: [{% for dn in deparment_numbers %}{{dn|escapejs}},{% endfor %}],
+              {% comment %} data: [300,200,100,500,600], {% endcomment %}
+              backgroundColor: color_palette1,  
+              hoverOffset: 6
+            }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {    
+                  legend: {
+                      position:'bottom',
+                  }
+              }
+          },
+  });
+
+
+  const myChart2 = new Chart(document.getElementById('myChart2'), {
+      type: 'bar',
+      data: {
+          {% comment %} labels: ['Red', 'Blue', 'Yellow',"tes","hajfhsk","gfdjhjksdh","jkhfd"],  {% endcomment %}
+          labels: [{% for p in positions %}"{{p|escapejs}}",{% endfor %}],
+          datasets: [{
+              label: "Number of invigilator",
+              data: [{% for pn in position_numbers %}{{pn|escapejs}},{% endfor %}],
+              {% comment %} data: [300,200,100,500,600,450,200], {% endcomment %}
+              backgroundColor: color_palette2,  
+              
+            }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      precision: 0
+                      }
+                  }
+              },
+              plugins: {
+                  legend: {
+                    display: false
+                  }
+                },
+          },
+  });
+</script>
+{% endblock body %}

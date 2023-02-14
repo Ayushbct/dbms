@@ -1,0 +1,89 @@
+{% extends 'templatesdbms\dbmsbase.html' %}
+{% block title %}DBMS New App{% endblock title %}
+{% block body %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+    integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+</script>
+
+<div class="container">
+    <div class="row row-cols-2">
+        <h4 class="col">Invigilators in departments</h4>
+    
+        <h4 class="col">Position of Invigilators</h4>
+        <div class="col">
+            <canvas id="myChart1" width="400" height="400"></canvas>
+        </div>
+    {% comment %} </div> {% endcomment %}
+    {% comment %} <div > {% endcomment %}
+        {% comment %} <div style="background-color:wheat" > {% endcomment %}
+        <div class="col">
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    
+    const color_palette1=["#FF6384","#36A2EB","#FFCD56","#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51","#f94144", "#f3722c", "#f8961e", "#f9844a","#f9c74f", "#90be6d", "#43aa8b", "#4d908e", "#577590", "#277da1"]
+    const color_palette2=['#90be6d', '#277da1','#f9c74f','#577590',  '#43aa8b' , '#f9844a', '#f8961e', '#f3722c', '#f94144', '#e76f51', '#4d908e','#f4a261', '#e9c46a', '#2a9d8f', '#264653', '#FFCD56', '#36A2EB', '#FF6384']
+    {% comment %} const ctx = document.getElementById('myChart'); {% endcomment %}
+    const myChart1 = new Chart(document.getElementById('myChart1'), {
+        type: 'doughnut',
+        data: {
+            {% comment %} labels: ['Red', 'Blue', 'Yellow',"tes","hajfhsk"],  {% endcomment %}
+            labels: [{% for d in departments %}"{{d|escapejs}}",{% endfor %}],
+            datasets: [{
+                {% comment %} label: 'Number of invigilator in departments', {% endcomment %}
+                data: [{% for dn in deparment_numbers %}{{dn|escapejs}},{% endfor %}],
+                {% comment %} data: [300,200,100,500,600], {% endcomment %}
+                backgroundColor: color_palette1,  
+                hoverOffset: 6
+              }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {    
+                    legend: {
+                        position:'bottom',
+                    }
+                }
+            },
+    });
+
+
+    const myChart2 = new Chart(document.getElementById('myChart2'), {
+        type: 'bar',
+        data: {
+            {% comment %} labels: ['Red', 'Blue', 'Yellow',"tes","hajfhsk","gfdjhjksdh","jkhfd"],  {% endcomment %}
+            labels: [{% for p in positions %}"{{p|escapejs}}",{% endfor %}],
+            datasets: [{
+                label: "Number of invigilator",
+                data: [{% for pn in position_numbers %}{{pn|escapejs}},{% endfor %}],
+                {% comment %} data: [300,200,100,500,600,450,200], {% endcomment %}
+                backgroundColor: color_palette2,  
+                
+              }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                      display: false
+                    }
+                  },
+            },
+    });
+</script>
+{% endblock body %}
