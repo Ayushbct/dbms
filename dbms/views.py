@@ -54,6 +54,7 @@ def dbmshome(request):
             dbframe = empexceldata
             
             for dbframe in dbframe.itertuples():
+                # print(dbframe.Phone)
                 if Newapp.objects.filter(newappphone=dbframe.Phone).exists()==False:
                     if len(dbframe.Name)>0:
                         newapp=Newapp.objects.create(profile=profile,newappname=dbframe.Name,newappemail=dbframe.Email, newappphone=dbframe.Phone,newappaddress=dbframe.Address,newappdepart=dbframe.Department,newappposition=dbframe.Position)
@@ -102,11 +103,18 @@ def dbmshome(request):
         positions.append(nap.newappposition)
     department_removing_dup=[*set(departments)]
     position_removing_dup=[*set(positions)]
+    remove=['nan','-']
+    for r in remove:
+        if r in department_removing_dup:
+            department_removing_dup.remove(r)
+        if r in position_removing_dup:
+            position_removing_dup.remove(r)
     for drd in department_removing_dup:
         deparment_numbers.append(departments.count(drd))
     for prd in position_removing_dup:
         position_numbers.append(positions.count(prd))
-
+    
+    # print(department_removing_dup)
     context={
         
         "profile":profile,

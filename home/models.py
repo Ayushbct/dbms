@@ -35,10 +35,10 @@ class Newapp(models.Model):
     profile = models.ForeignKey(Profile,blank=True,null=True, on_delete=models.CASCADE)
     # Upto here
     newappname=models.CharField(max_length=122)
-    newappemail=models.CharField(max_length=122)
+    newappemail=models.CharField(max_length=122,blank=True)
     newappphone=models.CharField(max_length=12)
     newappaddress=models.CharField(max_length=122)
-    newappdepart=models.CharField(max_length=255)
+    newappdepart=models.CharField(max_length=255,blank=True)
     newappposition=models.CharField(max_length=255)
     
     #newappdate=models.DateField()
