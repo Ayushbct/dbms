@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Add exam centre{% endblock title %}
+{% block addexamcentrecontent %}
+
+
+{% if addexamcentre_data %}
+<h1>Update exam centre</h1>
+<div class="container">
+    <form method="post" action="{% url 'updateexamcentrefunc' addexamcentre_data.id %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="examcentrename" class="form-label">Exam centre Name</label>
+        <input value="{{addexamcentre_data.examcentrename}}" type="text" required class="form-control" 
+            id="examcentrename" name="examcentrename" placeholder="Enter exam centre name">
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+
+<div class="container">
+    <h3>Selected building</h3>
+    <div>
+      {% for biec in buildingsinexamcentre %}
+      <p>
+ 
+        {{biec.buildingname}}
+        <a href="{% url 'deletebuildingfromexamcentre' biec.id addexamcentre_data.id%}"><button
+            class="btn btn-danger btn-sm">Delete</button></a>
+             
+      
+    </p>
+      {% endfor %}
+    </div>
+    <hr>
+  
+    <h3>Remaining building</h3>
+    <div>
+      {% for rbd in removedbuilding_data %}
+      {% if user == rbd.profile.user %}
+      {% comment %} <p>{{ard.roomname}}</p> {% endcomment %}
+      
+      <p>{{rbd.buildingname}}
+      
+       <a href="{% url 'addbuildinginexamcentre' rbd.id addexamcentre_data.id%}">
+        <button class="btn btn-info btn-sm">Add</button></a>
+   
+      </p>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <hr>
+  
+    <h3>All buildings</h3>
+    <div>
+      {% for abd in allbuilding_data %}
+      {% if user == abd.profile.user %}
+      <p>{{abd.buildingname}}</p>
+      {% endif %}
+      {% endfor %}
+    </div>
+  
+    <hr>
+</div>
+
+{% else %}
+
+<h1>Add exam centre</h1>
+<div class="container">
+  <form method="post" action="/addexamcentre">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="examcentrename" class="form-label">Exam centre Name</label>
+      <input type="text" required class="form-control" id="examcentrename" 
+      name="examcentrename" placeholder="Enter exam centre name">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endif %}
+
+
+
+
+
+
+
+<hr>
+<h1>List of all the exam centre</h1>
+<div class="container">
+    {% for aecd in allexamcentre_data %}
+    {% if user == aecd.profile.user  %}
+    <p>{{aecd.examcentrename}}
+      
+        
+        <a href="{% url 'updateexamcentre' aecd.id %}"><button class="btn btn-info btn-sm">Edit</button></a>
+        <a href="{% url 'deleteexamcentre' aecd.id %}"><button class="btn btn-danger btn-sm">Delete</button></a>
+  
+    </p>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock addexamcentrecontent %}

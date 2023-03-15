@@ -52,7 +52,7 @@ def dbmshome(request):
             empexceldata = pd.read_excel(excel_file)
             
             dbframe = empexceldata
-            
+            dbframe.Email=dbframe.Email.fillna("-")
             for dbframe in dbframe.itertuples():
                 # print(dbframe.Phone)
                 if Newapp.objects.filter(newappphone=dbframe.Phone).exists()==False:

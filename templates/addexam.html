@@ -54,11 +54,11 @@
       </div>
     </div>
 
-    <div class="mb-3">
+    {% comment %} <div class="mb-3">
       <label for="examcentre" class="form-label">Exam Centre</label>
       <input value="{{addexam_data.examcentre}}" type="text" required class="form-control" id="examcentre"
         name="examcentre" placeholder="Enter exam centre">
-    </div>
+    </div> {% endcomment %}
 
     <div class="mb-3">
       <label for="examdate" class="form-label">Exam Date</label>
@@ -116,26 +116,28 @@
 {% comment %} Upto here {% endcomment %}
 
 <div class="container">
-  <h3>Selected building</h3>
+  <h3>Selected exam centre</h3>
   <div>
-    {% for bie in buildingsinexam %}
+    {% for naec in newaddexamcentre %}
     <p>
-      {{bie.buildingname}}
-      <a href="{% url 'deletebuildingfromexam' bie.id addexam_data.id%}"><button
-          class="btn btn-danger btn-sm">Delete</button></a>
+      {{naec.examcentrename}}
+      <a href="{% url 'deleteexamcentrefromexam' naec.id addexam_data.id%}">
+        <button class="btn btn-danger btn-sm">Delete</button></a>
     </p>
     {% endfor %}
   </div>
   <hr>
 
-  <h3>Remaining buildings</h3>
+  <h3>Remaining exam centre</h3>
   
   <div>
-    {% for rbied in removedbuildingsinexam_data %}
-    {% if user == rbied.profile.user %}
+    {% comment %} {% for rbied in removedbuildingsinexam_data%} {% endcomment %}
+    {% for rnaecd in removednewaddexamcentre_data%}
+    
+    {% if user == rnaecd.profile.user %}
   
-    <p>{{rbied.buildingname}}
-      <a href="{% url 'addbuildinginexam' rbied.id addexam_data.id%}"><button class="btn btn-info btn-sm">Add</button></a>
+    <p>{{rnaecd.examcentrename}}
+      <a href="{% url 'addexamcentreinexam' rnaecd.id addexam_data.id%}"><button class="btn btn-info btn-sm">Add</button></a>
 
     </p>
     {% endif %}
@@ -143,11 +145,12 @@
   </div>
   <hr>
 
-  <h3>All buildings</h3>
+  <h3>All exam centre</h3>
   <div>
-    {% for aabd in alladdbuilding_data %}
-    {% if user == aabd.profile.user %}
-    <p>{{aabd.buildingname}}</p>
+    {% comment %} {% for aabd in alladdbuilding_data %} {% endcomment %}
+    {% for aaecd in alladdexamcentre_data %}
+    {% if user == aaecd.profile.user %}
+    <p>{{aaecd.examcentrename}}</p>
     {% endif %}
     {% endfor %}
   </div>
@@ -241,11 +244,11 @@
       </div>
     </div>
 
-    <div class="mb-3">
+    {% comment %} <div class="mb-3">
       <label for="examcentre" class="form-label">Exam Centre</label>
       <input type="text" required class="form-control" id="examcentre" name="examcentre"
         placeholder="Enter exam centre">
-    </div>
+    </div> {% endcomment %}
 
     <div class="mb-3">
       <label for="examdate" class="form-label">Exam Date</label>

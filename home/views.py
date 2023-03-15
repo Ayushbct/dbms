@@ -127,7 +127,7 @@ def addexam(request):
         examtype = request.POST.get('examtype')
         examsemtype = request.POST.get('examsemtype')
         regularback = request.POST.get('regularback')
-        examcentre = request.POST.get('examcentre')
+        # examcentre = request.POST.get('examcentre')
         examdate = request.POST.get('examdate')
         newexamdate = request.POST.get('examdate')
         examtime = request.POST.get('examtime')
@@ -142,13 +142,16 @@ def addexam(request):
         # Upto here
 
         addexam = Addexam(examname=examname, examtype=examtype, examsemtype=examsemtype,
-                          regularback=regularback, examcentre=examcentre, examdate=examdate,
+                          regularback=regularback,
+                        #    examcentre=examcentre,
+                            examdate=examdate,
                           newexamdate=newexamdate,examtime=examtime,newexamtime=newexamtime,
                           examtime_end=examtime_end,newexamtime_end=newexamtime_end ,
                           examshift=examshift,examdesc=examdesc,
                         #   This is for dbms
                           profile=profile,
                         #   Upto here
+                        
                           )
         addexam.save()
         messages.success(request, 'Exam added')
@@ -172,9 +175,12 @@ def viewexam(request):
 
 def updateexam(request, addexam_id):
     addexam_data = Addexam.objects.get(pk=addexam_id)
-    buildingsinexam=addexam_data.examaddbuilding.all()
-    removedbuildingsinexam_data = Addbuilding.objects.exclude(pk__in=buildingsinexam)
-    alladdbuilding_data = Addbuilding.objects.all()
+    # buildingsinexam=addexam_data.examaddbuilding.all()
+    # removedbuildingsinexam_data = Addbuilding.objects.exclude(pk__in=buildingsinexam)
+
+    newaddexamcentre=addexam_data.newaddexamcentre.all()
+    removednewaddexamcentre_data=Addexamcentre.objects.exclude(pk__in=newaddexamcentre)
+    alladdexamcentre_data = Addexamcentre.objects.all()
     allexam_data = Addexam.objects.all()
     current_user = Profile.objects.get(user=request.user)
     
@@ -184,9 +190,9 @@ def updateexam(request, addexam_id):
         'addexam_data': addexam_data,
         
         
-        'buildingsinexam':buildingsinexam,
-        'removedbuildingsinexam_data':removedbuildingsinexam_data,
-        'alladdbuilding_data':alladdbuilding_data,
+        'newaddexamcentre':newaddexamcentre,
+        'removednewaddexamcentre_data':removednewaddexamcentre_data,
+        'alladdexamcentre_data':alladdexamcentre_data,
         'current_user':current_user,
 
     }
@@ -201,7 +207,7 @@ def updatefunc(request, addexam_id):
     addexam_data.examtype = request.POST.get('examtype')
     addexam_data.examsemtype = request.POST.get('examsemtype')
     addexam_data.regularback = request.POST.get('regularback')
-    addexam_data.examcentre = request.POST.get('examcentre')
+    # addexam_data.examcentre = request.POST.get('examcentre')
     addexam_data.examdate = request.POST.get('examdate')
     addexam_data.newexamdate = request.POST.get('examdate')
     addexam_data.examtime = request.POST.get('examtime')
@@ -412,20 +418,20 @@ def addroominbuilding(request,addroom_id, addbuilding_id):
     addbuilding_data.rooms.add(addroom_data)
     return redirect('updatebuilding',addbuilding_id)
 
-def deletebuildingfromexam(request,addbuilding_id, addexam_id):
+def deleteexamcentrefromexam(request,addexamcentre_id, addexam_id):
 
-    addbuilding_data=Addbuilding.objects.get(pk=addbuilding_id)
+    addexamcentre_data=Addexamcentre.objects.get(pk=addexamcentre_id)
     addexam_data = Addexam.objects.get(pk=addexam_id)
     
-    addexam_data.examaddbuilding.remove(addbuilding_data)
+    addexam_data.newaddexamcentre.remove(addexamcentre_id)
     return redirect('updateexam',addexam_id)
 
 
-def addbuildinginexam(request,addbuilding_id, addexam_id):
-    addbuilding_data=Addbuilding.objects.get(pk=addbuilding_id)
+def addexamcentreinexam(request,addexamcentre_id, addexam_id):
+    addexamcentre_data=Addexamcentre.objects.get(pk=addexamcentre_id)
     addexam_data = Addexam.objects.get(pk=addexam_id)
     
-    addexam_data.examaddbuilding.add(addbuilding_data)
+    addexam_data.newaddexamcentre.add(addexamcentre_data)
     return redirect('updateexam',addexam_id)
 
 
@@ -494,18 +500,22 @@ def randominvfunc(request,addexam_id):
     listofroom=[]
     listofnewapp=list(allnewapp_data)
     for aed in allexam_data:
-        allbuilding_data=aed.examaddbuilding.all()
-        for abd in allbuilding_data:
-            allroom_data = abd.rooms.all()
-            # listofroom=list(allroom_data)
-            if len(allroom_data)==0:
-                continue
-            else:
-                listofroom.append(list(allroom_data))
-            for ard in allroom_data:
-                allnewaapproom=ard.invigilatorsinroom.all()
-                for anar in allnewaapproom:
-                    ard.invigilatorsinroom.remove(anar)
+
+        allexamcentre_data=aed.newaddexamcentre.all()
+        for aecd in allexamcentre_data:
+
+            allbuilding_data=aecd.buildings.all()
+            for abd in allbuilding_data:
+                allroom_data = abd.rooms.all()
+                # listofroom=list(allroom_data)
+                if len(allroom_data)==0:
+                    continue
+                else:
+                    listofroom.append(list(allroom_data))
+                for ard in allroom_data:
+                    allnewaapproom=ard.invigilatorsinroom.all()
+                    for anar in allnewaapproom:
+                        ard.invigilatorsinroom.remove(anar)
                   
     
     print (len(listofroom))
@@ -516,20 +526,22 @@ def randominvfunc(request,addexam_id):
     
     if len(listofroom)*numberofinvineachroom<= len(allnewapp_data):
         for aed in allexam_data:
-            allbuilding_data=aed.examaddbuilding.all()
-            for abd in allbuilding_data:
-                allroom_data = abd.rooms.all().order_by('?')
-                # if len(allroom_data)==0 and len(allbuilding_data)==1:
-                #     messages.info(request, "No rooms in the only building")
-                #     return redirect('updateexam',addexam_id)
-                for ard in allroom_data:
-                    # if len(ard.invigilatorsinroom.all())<numberofinvineachroom:
-                    for alnewda in allnewapp_data: 
-                        if alnewda not in listofinvallroom and len(ard.invigilatorsinroom.all())<numberofinvineachroom:
-                            listofinvallroom.append(alnewda)
-                            ard.invigilatorsinroom.add(alnewda)
-                # messages.success(request, "Invigilators randomized to the rooms in "+ abd.buildingname)
-        messages.success(request, "Invigilators randomized to the rooms")
+            allexamcentre_data=aed.newaddexamcentre.all()
+            for aecd in allexamcentre_data:
+                allbuilding_data=aecd.buildings.all()
+                for abd in allbuilding_data:
+                    allroom_data = abd.rooms.all().order_by('?')
+                    # if len(allroom_data)==0 and len(allbuilding_data)==1:
+                    #     messages.info(request, "No rooms in the only building")
+                    #     return redirect('updateexam',addexam_id)
+                    for ard in allroom_data:
+                        # if len(ard.invigilatorsinroom.all())<numberofinvineachroom:
+                        for alnewda in allnewapp_data: 
+                            if alnewda not in listofinvallroom and len(ard.invigilatorsinroom.all())<numberofinvineachroom:
+                                listofinvallroom.append(alnewda)
+                                ard.invigilatorsinroom.add(alnewda)
+                    # messages.success(request, "Invigilators randomized to the rooms in "+ abd.buildingname)
+            messages.success(request, "Invigilators randomized to the rooms")
     else:
         messages.error(request, "Not enough invigilator for all rooms")
     
@@ -556,8 +568,79 @@ def deleteAll(request):
     alladdexam_data = Addexam.objects.all()
     alladdexam_data.delete()
     
+    alladdexamcentre_data = Addexamcentre.objects.all()
+    alladdexamcentre_data.delete()
     
-    messages.success(request, 'All Newapp, Exam, Building, Room deleted')
+    messages.success(request, 'All Newapp, Exam, Exam centre, Building, Room deleted')
     return redirect('viewexam')
 
 
+def addexamcentre(request):
+    if request.method == "POST":
+        examcentrename = request.POST.get('examcentrename')
+        # This is for dbms
+        profile = Profile.objects.get(user=request.user)
+        # Upto here
+        addexamcentre = Addexamcentre(examcentrename=examcentrename,
+                            #   This is for dbms
+                            profile=profile,
+                            #   Upto here
+                            )
+        
+
+        addexamcentre.save()
+        messages.success(request, 'Exam centre added')
+    allexamcentre_data = Addexamcentre.objects.all()
+    data={
+        'allexamcentre_data':allexamcentre_data,
+    }
+    return render(request, "addexamcentre.html",data)
+
+def updateexamcentre(request, addexamcentre_id):
+    
+    addexamcentre_data = Addexamcentre.objects.get(pk=addexamcentre_id)
+    allexamcentre_data = Addexamcentre.objects.all()
+
+    buildingsinexamcentre=addexamcentre_data.buildings.all()
+    removedbuilding_data = Addbuilding.objects.exclude(pk__in=buildingsinexamcentre)
+    allbuilding_data = Addbuilding.objects.all()
+    data = {
+        'addexamcentre_data': addexamcentre_data,
+        'allexamcentre_data': allexamcentre_data,
+        'buildingsinexamcentre':buildingsinexamcentre,
+        'removedbuilding_data':removedbuilding_data,
+        'allbuilding_data':allbuilding_data,
+        
+    }
+    return render(request, "addexamcentre.html", data)
+
+def updateexamcentrefunc(request, addexamcentre_id):
+    
+    addexamcentre_data = Addexamcentre.objects.get(pk=addexamcentre_id)
+    addexamcentre_data.examcentrename = request.POST.get('examcentrename')
+    
+    addexamcentre_data.save()
+    messages.success(request, 'Exam centre updated')
+    return redirect('addexamcentre')
+
+def deleteexamcentre(request, addexamcentre_id):
+    addexamcentre_data = Addexamcentre.objects.get(pk=addexamcentre_id)
+    addexamcentre_data.delete()
+    messages.success(request, 'Exam centre deleted')
+    return redirect('addexamcentre')
+
+def addbuildinginexamcentre(request,addbuilding_id, addexamcentre_id):
+    addexamcentre_data=Addexamcentre.objects.get(pk=addexamcentre_id)
+    addbuilding_data = Addbuilding.objects.get(pk=addbuilding_id)
+    
+    addexamcentre_data.buildings.add(addbuilding_data)
+    return redirect('updateexamcentre',addexamcentre_id)
+
+
+def deletebuildingfromexamcentre(request,addbuilding_id, addexamcentre_id):
+
+    addexamcentre_data=Addexamcentre.objects.get(pk=addexamcentre_id)
+    addbuilding_data = Addbuilding.objects.get(pk=addbuilding_id)
+    
+    addexamcentre_data.buildings.remove(addbuilding_data)
+    return redirect('updateexamcentre',addexamcentre_id)

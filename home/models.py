@@ -35,7 +35,7 @@ class Newapp(models.Model):
     profile = models.ForeignKey(Profile,blank=True,null=True, on_delete=models.CASCADE)
     # Upto here
     newappname=models.CharField(max_length=122)
-    newappemail=models.CharField(max_length=122,blank=True)
+    newappemail=models.CharField(max_length=122,blank=True,default="-")
     newappphone=models.CharField(max_length=12)
     newappaddress=models.CharField(max_length=122)
     newappdepart=models.CharField(max_length=255,blank=True)
@@ -66,6 +66,17 @@ class Addbuilding(models.Model):
     def __str__(self):
         return self.buildingname
 
+class Addexamcentre(models.Model):
+    # This is for dbms
+    profile = models.ForeignKey(Profile,blank=True,null=True, on_delete=models.CASCADE)
+    # Upto here
+    examcentrename=models.CharField(max_length=122)
+    buildings=models.ManyToManyField(Addbuilding,blank=True)
+    
+    def __str__(self):
+        return self.examcentrename
+
+
 class Addexam(models.Model):
     # This is for dbms
     profile = models.ForeignKey(Profile,blank=True,null=True, on_delete=models.CASCADE)
@@ -74,7 +85,7 @@ class Addexam(models.Model):
     examtype=models.CharField(max_length=122)
     examsemtype=models.CharField(max_length=122,blank=True,null=True)
     regularback=models.CharField(max_length=122,blank=True,null=True)
-    examcentre=models.CharField(max_length=122)
+    # examcentre=models.CharField(max_length=122)
     examdate=models.CharField(max_length=122)
     newexamdate=models.DateField(max_length=122,blank=True, null=True)
     examtime=models.CharField(max_length=122)
@@ -90,8 +101,9 @@ class Addexam(models.Model):
 
     #This is for buildings in exam
     examaddbuilding=models.ManyToManyField(Addbuilding,blank=True)
+    newaddexamcentre = models.ManyToManyField(Addexamcentre,blank=True)
     def __str__(self):
-        return self.examname +" : "+ self.examcentre
+        return self.examname
 
 
 class Testing(models.Model):

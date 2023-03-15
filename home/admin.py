@@ -14,6 +14,7 @@ admin.site.register(Addexam)
 admin.site.register(Addroom)
 
 admin.site.register(Addbuilding)
+admin.site.register(Addexamcentre)
 admin.site.register(Testing)
 
 # This is for dbms

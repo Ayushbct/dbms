@@ -14,7 +14,7 @@
                 <th scope="col">Exam type</th>
                 <th scope="col">Exam sem type</th>
                 <th scope="col">Regular or back</th>
-                <th scope="col">Exam centre</th>
+                {% comment %} <th scope="col">Exam centre</th> {% endcomment %}
                 <th scope="col">Exam date</th>
                 <th scope="col">Start time</th>
                 <th scope="col">End time</th>
@@ -41,7 +41,7 @@
                 <td>{{n.examtype}}</td>
                 <td>{{n.examsemtype}}</td>
                 <td>{{n.regularback}}</td>
-                <td>{{n.examcentre}}</td>
+                {% comment %} <td>{{n.examcentre}}</td> {% endcomment %}
                 {% comment %} <td>{{n.examdate}}</td> {% endcomment %}
                 <td>{{n.newexamdate}}</td>
                 <td>{{n.newexamtime}}</td>

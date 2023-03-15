@@ -15,7 +15,7 @@
     </div>
     <div class="mb-3">
       <label for="newappemail" class="form-label">Email address</label>
-      <input value='{{newapp_data.newappemail}}' type="email"required class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
+      <input value='{{newapp_data.newappemail}}' type="text"required class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
 
     </div>
     <div class="mb-3">
@@ -35,12 +35,13 @@
     </div>
     <div class="mb-3">
       <label for="newappdepart" class="form-label">Department</label>
-      <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
+      <input value='{{newapp_data.newappdepart}}' type="text"required class="form-control" id="newappdepart" name="newappdepart" placeholder="Enter department">
+      {% comment %} <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
       
       <option value="">Select your department</option>
       <option value="Department of Computer and Electronics Engineering">Department of Computer and Electronics Engineering</option>
       <option value="Department of Electrical Engineering">Department of Electrical Engineering</option>
-      <option value="Department of Civil Engineering">Department of Civil Engineering</option>
+      <option value="Department of Civil Engineering">Department of Civil Engineering</option> {% endcomment %}
     </select>
     </div>
 
@@ -60,7 +61,7 @@
     </div>
     <div class="mb-3">
       <label for="newappemail" class="form-label">Email address</label>
-      <input type="email"required class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
+      <input type="text" class="form-control" id="newappemail" name="newappemail" placeholder="Enter email">
 
     </div>
     <div class="mb-3">
@@ -80,12 +81,13 @@
     </div>
     <div class="mb-3">
       <label for="newappdepart" class="form-label">Department</label>
-      <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
+      <input type="text"required class="form-control" id="newappdepart" name="newappdepart" placeholder="Enter department">
+      {% comment %} <select class="form-select" aria-label="Default select example" id="newappdepart" name="newappdepart" required>
       
       <option value="">Select your department</option>
       <option value="Department of Computer and Electronics Engineering">Department of Computer and Electronics Engineering</option>
       <option value="Department of Electrical Engineering">Department of Electrical Engineering</option>
-      <option value="Department of Civil Engineering">Department of Civil Engineering</option>
+      <option value="Department of Civil Engineering">Department of Civil Engineering</option> {% endcomment %}
     </select>
     </div>
 

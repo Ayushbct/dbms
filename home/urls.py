@@ -52,8 +52,18 @@ urlpatterns = [
     path("addroominbuilding/<addroom_id>/<addbuilding_id>",views.addroominbuilding,name='addroominbuilding'),
 
 
-    path("deletebuildingfromexam/<addbuilding_id>/<addexam_id>",views.deletebuildingfromexam,name='deletebuildingfromexam'),
-    path("addbuildinginexam/<addbuilding_id>/<addexam_id>",views.addbuildinginexam,name='addbuildinginexam'),
+    path("addexamcentre",views.addexamcentre,name='addexamcentre'),
+    path("deleteexamcentre/<addexamcentre_id>",views.deleteexamcentre,name='deleteexamcentre'),
+    path("updateexamcentre/<addexamcentre_id>",views.updateexamcentre,name='updateexamcentre'),
+    path("updateexamcentrefunc/<addexamcentre_id>",views.updateexamcentrefunc,name='updateexamcentrefunc'),
+    path("deletebuildingfromexamcentre/<addbuilding_id>/<addexamcentre_id>",views.deletebuildingfromexamcentre,name='deletebuildingfromexamcentre'),
+    path("addbuildinginexamcentre/<addbuilding_id>/<addexamcentre_id>",views.addbuildinginexamcentre,name='addbuildinginexamcentre'),
+
+    
+
+
+    path("deleteexamcentrefromexam/<addexamcentre_id>/<addexam_id>",views.deleteexamcentrefromexam,name='deleteexamcentrefromexam'),
+    path("addexamcentreinexam/<addexamcentre_id>/<addexam_id>",views.addexamcentreinexam,name='addexamcentreinexam'),
 
 
     path('signup',views.handleSignup,name='handleSignup'),
